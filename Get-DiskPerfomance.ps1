@@ -9,7 +9,7 @@ if (!(test-path $LogFile))
 	# "Date;Time;PercentIdleTime;PercentDiskTime" >> $LogFile	
     #"DateTime;PercentDiskReadTime;PercentDiskWriteTime;PercentRamTime"
     	
-    "DateTime;PercentDiskReadTime;PercentDiskWriteTime;RamAvailable;PercentIdleTime;PercentDiskTime;RamDeviation;RamAvaiableMb2;RamAvaiableMb1" >> $LogFile		
+    "DateTime;PercentDiskReadTime;PercentDiskWriteTime;RamAvailable;PercentIdleTime;CPU;PercentDiskTime;RamDeviation;RamAvaiableMb2;RamAvaiableMb1" >> $LogFile		
 	}
 $FullRam = 32*1024
 
@@ -57,6 +57,15 @@ For($i=0;$i -le 100; $i=0)
     #$PercentRamTime = [math]::Round((($FullRam-$RamAvaiableMb2)/$FullRam) * 100)
     $RamAvailableGB = (($RamAvaiableMb2)/1024)
 
+    $cpu = 0
+    $process = get-ciminstance win32_perfformatteddata_perfproc_process
+    foreach($proces in $process)
+        {if($($proces.name) -like "chia#*")
+            {$cpu += $($proces.percentprocessortime)
+            #Write-Host "$($proces.percentprocessortime) " -NoNewline
+            }        
+        }
+
     $Date = Get-Date
     Write-host "$Date" -f White -NoNewline
     #Write-host " $PercentIdleTime" -f Red -NoNewline
@@ -64,6 +73,7 @@ For($i=0;$i -le 100; $i=0)
     Write-host " $(AddSpace($PercentDiskReadTime))" -f Green  -NoNewline
     Write-host " $(AddSpace($PercentDiskWriteTime))" -f Yellow  -NoNewline
     Write-host " $(AddSpace($PercentIdleTime)) " -f Red  -NoNewline
+    Write-host " $(AddSpace($cpu)) " -f Magenta  -NoNewline
     '{0:N2}' -f  $RamAvailableGb
     #Write-host " $RamAvaiableMb2" -f Blue  -NoNewline 
     #If ($RamDeviation -lt 0)
@@ -74,5 +84,5 @@ For($i=0;$i -le 100; $i=0)
 	#    }
     #"$($Date.ToShortDateString());$($Date.ToShortTimeString());$PercentIdleTime;$PercentDiskTime;$PercentRamTime;$RamAvaiableMb2;$RamAvaiableMb1" >> $LogFile
     #"$Date;$PercentIdleTime;$PercentDiskTime;$PercentDiskReadTime;$PercentDiskWriteTime;$RamDeviation;$PercentRamTime;$RamAvaiableMb2;$RamAvaiableMb1" >> $LogFile
-    "$Date;$PercentDiskReadTime;$PercentDiskWriteTime;$RamAvailable;$PercentIdleTime;$PercentDiskTime;$RamDeviation;$RamAvaiableMb2;$RamAvaiableMb1" >> $LogFile		
+    "$Date;$PercentDiskReadTime;$PercentDiskWriteTime;$RamAvailable;$PercentIdleTime;$cpu;$PercentDiskTime;$RamDeviation;$RamAvaiableMb2;$RamAvaiableMb1" >> $LogFile		
 }
