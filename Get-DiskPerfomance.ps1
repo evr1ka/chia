@@ -84,5 +84,5 @@ For($i=0;$i -le 100; $i=0)
 	#    }
     #"$($Date.ToShortDateString());$($Date.ToShortTimeString());$PercentIdleTime;$PercentDiskTime;$PercentRamTime;$RamAvaiableMb2;$RamAvaiableMb1" >> $LogFile
     #"$Date;$PercentIdleTime;$PercentDiskTime;$PercentDiskReadTime;$PercentDiskWriteTime;$RamDeviation;$PercentRamTime;$RamAvaiableMb2;$RamAvaiableMb1" >> $LogFile
-    "$Date;$PercentDiskReadTime;$PercentDiskWriteTime;$RamAvailable;$PercentIdleTime;$cpu;$PercentDiskTime;$RamDeviation;$RamAvaiableMb2;$RamAvaiableMb1" >> $LogFile		
+    "$Date;$PercentDiskReadTime;$PercentDiskWriteTime;$RamAvailableGb;$PercentIdleTime;$cpu;$PercentDiskTime;$RamDeviation;$RamAvaiableMb2;$RamAvaiableMb1" >> $LogFile		
 }
